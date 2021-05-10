@@ -1,17 +1,16 @@
 <template>
   <div class="detail">
+      <!-- Muestra los detalles -->
     <h2 class="detailInfo" v-for="detail in details" :key="detail[0]">{{detail[0]}} : {{detail[1]}}</h2>
     
-    <router-link class="footer" :to="{path: 'data'}"> &lt; &lt; Go Back</router-link>
-
-    <modal v-if="showSatisfactoryModal" @close="showSatisfactoryModal = false">
+    <!-- Vuelve a la pagina anterior -->
+    <footer><router-link class="footer" :to="{path: 'data'}"> &lt; &lt; Go Badck</router-link></footer>
     
-        <h2 slot="header">Satisfactory loading</h2>
-    </modal>
 
-    <modal v-if="showErrorModal" @close="showErrorModal = false">
-        
-        <h2 slot="header">Error occurred reload the page</h2>
+    <!-- Modal que muestra si ha salida satisfactoria la carga o si ha havido un error -->
+    <modal v-if="showModal" @close="showModal = false">
+    
+        <h2 slot="header">{{message}}</h2>
     </modal>
 
   </div>
@@ -22,8 +21,8 @@ export default {
   data(){
     return {
      details:[],
-     showSatisfactoryModal:false,
-     showErrorModal:false
+     showModal:false,
+     message:""
     }
   },
   name: 'detail',
@@ -31,15 +30,18 @@ export default {
       modal
   },
   methods:{
+      // Obtiene el detalle a partir de la url 
       getDetail(url){
            this.$axios
         .get(url)
         .then(Response => {
             this.transformDetail(Response.data)
-            this.showSatisfactoryModal = true;
+            this.message = "Satisfactory loading"
+            this.showModal = true;
         })
         .catch(err =>{
-            this.showErrorModal = true;
+            this.message = "Error occurred reload the page"
+            this.showModal = true;
         })
       },
       transformDetail(detail){
@@ -53,6 +55,7 @@ export default {
     
   },
   created(){
+      // al crearse la pagina obten el detalle a partir de la variable guradada en el local storage
       this.getDetail(localStorage.dataId)
     
   }
@@ -62,10 +65,14 @@ export default {
 .detailInfo{
     text-align: left;
 }
+
+footer {
+    margin-top: 20px;
+    clear: both;
+    position: relative;
+    
+}
 .footer{
-    position:absolute;
-    bottom: 5%;
-    left:10%;
     color: black;
     text-decoration: none;
     font-size:31px;

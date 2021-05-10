@@ -3,7 +3,7 @@
     <div class="modalMask">
       <div class="modalWrapper">
         <div class="modalContainer">
-
+          <!-- Apartado del texto del modal -->
           <div class="modalHeader">
             <slot name="header">
               default header
@@ -11,7 +11,7 @@
           </div>
 
           
-
+          <!-- Apartado de botones del modal -->
           <div class="modalFooter">
             <slot name="footer">
               <button class="modalButton" @click="$emit('close')">
